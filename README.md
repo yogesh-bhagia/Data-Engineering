@@ -37,22 +37,22 @@
 
 
 
---Hive and sqoop
-      To ingest data in Hive table from MySQL
+--Hive and sqoop 
+      To ingest data in Hive table from MySQL. 
         >>query='''sqoop import  --connect {c} --username {un} --password {pd} --table {tb} --m 1 --target-dir {td} --hive-import --create-hive-table'''.format(c=val['conn'],
                                                                                                                                                             un=val['username'],
                                                                                                                                                             pd=val['password'],
                                                                                                                                                             tb=val['tabName'],
                                                                                                                                                             td=val['tarDir'],)
-      We could also create External Table on top of HDFS file using
+      We could also create External Table on top of HDFS file using 
         >>create external table if not exist "table name"(---) command
 
 
 
---Key Features
-      Designed Effective and Robust Data Ingestion Framework
-      Importing full and Delta data load from source.
-      Ingestion jobs using Sqoop Incremental Inputs
-      Created Automated Ingestion Framework using configuration driven approach.
-      Created Framework/ Automated script using Python & json file
+--Key Features--  
+      Designed Effective and Robust Data Ingestion Framework. 
+      Importing full and Delta data load from source. 
+      Ingestion jobs using Sqoop Incremental Inputs. 
+      Created Automated Ingestion Framework using configuration driven approach. 
+      Created Framework/ Automated script using Python & json file. 
       Project is in accordance with Error Handling, File auditing (checking for data quality and consistency) and logging of steps.
