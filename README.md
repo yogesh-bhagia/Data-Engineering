@@ -8,7 +8,7 @@
 
 --Required
       Google Cloud Platform (GCP) -a suite of cloud computing services
-      .csv Files -Used as an Input Data
+      .csv Files -Used as an Input Data.
 
 
 
@@ -33,7 +33,7 @@
 --Ingesting Data to Hadoop Cluster
       To Ingest Data From MySQL RDBMS to Hadoop Cluster, I used cli command
         >> hdfs dfs -put (Source File from LFS) (Destination on HDFS)
-      We could also use copyFromLocal command
+      We could also use copyFromLocal command.
 
 
 
