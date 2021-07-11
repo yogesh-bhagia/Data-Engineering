@@ -38,7 +38,7 @@
 
 
 --Hive and sqoop-- 
-      To ingest data in Hive table from MySQL. 
+        To ingest data in Hive table from MySQL. 
         >>query='''sqoop import  --connect {c} --username {un} --password {pd} --table {tb} --m 1 --target-dir {td} --hive-import --create-hive-table'''.format(c=val['conn'],
                                                                                                                                                             un=val['username'],
                                                                                                                                                             pd=val['password'],
