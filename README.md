@@ -32,7 +32,7 @@
 
 --Ingesting Data to Hadoop Cluster
       To Ingest Data From MySQL RDBMS to Hadoop Cluster, I used cli command
-        >> hdfs dfs -put <Source File from LFS> <Destination on HDFS>
+        >> hdfs dfs -put (Source File from LFS) (Destination on HDFS)
       We could also use copyFromLocal command
 
 
@@ -45,7 +45,7 @@
                                                                                                                                                             tb=val['tabName'],
                                                                                                                                                             td=val['tarDir'],)
       We could also create External Table on top of HDFS file using
-        >>create external table if not exist <table name>() command
+        >>create external table if not exist "table name"(---) command
 
 
 
