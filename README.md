@@ -7,7 +7,7 @@
 
 
 --Required--
-      Google Cloud Platform (GCP) -a suite of cloud computing services
+      Google Cloud Platform (GCP), a suite of cloud computing services
       .csv Files -Used as an Input Data.
 
 
