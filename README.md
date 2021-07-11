@@ -14,11 +14,11 @@
 
 --Create Table in MySQL db
       Get schema of table using csv file with proper datatype
-      import pandas 
+      import pandas
       import pymysql
-      import sqlalchemy 
-      When writing data from a Pandas DataFrame to a SQL database, I used 
-      DataFrame.to_sql method. 
+      import sqlalchemy
+      When writing data from a Pandas DataFrame to a SQL database, I used
+      DataFrame.to_sql method.
         >>A.to_sql(con=engine, name='application_test_table', if_exists='replace')
       We could also use  LOAD DATA INFILE
 
@@ -35,9 +35,9 @@
         >> hdfs dfs -put <Source File from LFS> <Destination on HDFS>
       We could also use copyFromLocal command
 
-      
-      
---Hive and sqoop 
+
+
+--Hive and sqoop
       To ingest data in Hive table from MySQL
         >>query='''sqoop import  --connect {c} --username {un} --password {pd} --table {tb} --m 1 --target-dir {td} --hive-import --create-hive-table'''.format(c=val['conn'],
                                                                                                                                                             un=val['username'],
@@ -47,12 +47,12 @@
       We could also create External Table on top of HDFS file using
         >>create external table if not exist <table name>() command
 
-  
-      
+
+
 --Key Features
       Designed Effective and Robust Data Ingestion Framework
       Importing full and Delta data load from source.
       Ingestion jobs using Sqoop Incremental Inputs
       Created Automated Ingestion Framework using configuration driven approach.
       Created Framework/ Automated script using Python & json file
-      Project is in accordance with Error Handling, File auditing ( checking for data quality and consistency) and logging of steps.
+      Project is in accordance with Error Handling, File auditing (checking for data quality and consistency) and logging of steps.
