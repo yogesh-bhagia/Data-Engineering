@@ -6,13 +6,13 @@
 
 
 
---Required
+--Required--
       Google Cloud Platform (GCP) -a suite of cloud computing services
       .csv Files -Used as an Input Data.
 
 
 
---Create Table in MySQL db
+--Create Table in MySQL db--
       Get schema of table using csv file with proper datatype
       import pandas
       import pymysql
@@ -24,13 +24,13 @@
 
 
 
---Auditing
+--Auditing--
       Developed Audit component using Python + MySql
       Checking Attributes count and Records count.
 
 
 
---Ingesting Data to Hadoop Cluster
+--Ingesting Data to Hadoop Cluster--
       To Ingest Data From MySQL RDBMS to Hadoop Cluster, I used cli command
         >> hdfs dfs -put (Source File from LFS) (Destination on HDFS)
       We could also use copyFromLocal command.
