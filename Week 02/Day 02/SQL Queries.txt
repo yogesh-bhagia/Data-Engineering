@@ -1,0 +1,12 @@
+select distinct credit_currency from bureau;
+select distinct CREDIT_ACTIVE from bureau;
+select min(CREDIT_DAY_OVERDUE), max(CREDIT_DAY_OVERDUE) from bureau;
+select distinct credit_type from bureau;
+select count(*) from bureau where credit_day_overdue=0
+select min(amt_annuity), max(amt_annuity) from bureau
+select distinct status from bureau_balance                
+
+select distinct NAME_CONTRACT_STATUS from credit_card_balance
+select count(*) from credit_card_balance where NAME_CONTRCT_STATUS='Approved'
+select count(*) from credit_card_balance where NAME_CONTRCT_STATUS='Refused'
+select SK_BUREAU_ID, count(*) from bureau group by SK_BUREAU_ID;    
