@@ -1,0 +1,28 @@
+Importing a Table into HDFS
+----------------------------
+$ sqoop import --connect --table --username --password --target-dir 
+
+
+Importing Selected Data from Table:
+-----------------------------------
+$ sqoop import --connect --table --username --password --columns --where 
+
+
+Importing Data from Query
+-------------------------
+$ sqoop import --connect --table --username --password --query 
+
+
+Incremental Exports
+-------------------
+$ sqoop import --connect --table --username --password --incremental --check-column --last-value 
+
+
+Importing Data into Hive
+------------------------
+$ sqoop import --connect --table --username --password --hive-import --hive-table
+
+
+Sqoop-Import-all-Tables
+-----------------------
+$ sqoop-import-all-tables ---connect --username --password 
