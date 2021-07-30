@@ -1,0 +1,37 @@
+$ sqoop eval \
+--connect jdbc:mysql://localhost:3306/demo/db \
+--username root \ 
+--query “SELECT * FROM employee LIMIT 3”
+
+
++------+--------------+-------------+-------------------+--------+
+| Id   | Name         | Designation | Salary            | Dept   |
++------+--------------+-------------+-------------------+--------+
+| 1201 | gopal        | manager     | 50000             | TP     |
+| 1202 | manisha      | preader     | 50000             | TP     |
+| 1203 | khalil       | php dev     | 30000             | AC     |
++------+--------------+-------------+-------------------+--------+
+
+
+
+
+$ sqoop eval \
+--connect jdbc:mysql://localhost:3306/demo/db \
+--username root \ 
+-e “INSERT INTO employee VALUES(1207,‘Raju’,‘UI dev’,15000,‘TP’)”
+
+
+mysql>
+mysql> use db;
+mysql> SELECT * FROM employee;
++------+--------------+-------------+-------------------+--------+
+| Id   | Name         | Designation | Salary            | Dept   |
++------+--------------+-------------+-------------------+--------+
+| 1201 | gopal        | manager     | 50000             | TP     |
+| 1202 | manisha      | preader     | 50000             | TP     |
+| 1203 | khalil       | php dev     | 30000             | AC     |
+| 1204 | prasanth     | php dev     | 30000             | AC     |
+| 1205 | kranthi      | admin       | 20000             | TP     |
+| 1206 | satish p     | grp des     | 20000             | GR     |
+| 1207 | Raju         | UI dev      | 15000             | TP     |
++------+--------------+-------------+-------------------+--------+
