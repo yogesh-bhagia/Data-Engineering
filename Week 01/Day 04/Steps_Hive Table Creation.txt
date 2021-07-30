@@ -1,0 +1,46 @@
+HIVE TABLE CREATION STEPS
+____________________________
+
+
+Step 1: Create a Database
+--------------------------
+Create a database named “project1” by running the create command:
+
+-->  create database project1;
+
+-->  show databases;
+
+-->  use project1;
+
+
+
+Step 2: Create a Table in Hive
+-------------------------------
+
+create table intstallments_payments(
+SK_ID_PREV string,
+SK_ID_CURR string,
+NUM_INSTALMENT_VERSION string,
+NUM_INSTALMENT_NUMBER string,
+DAYS_INSTALMENT string,
+DAYS_ENTRY_PAYMENT string,
+AMT_INSTALMENT string,
+AMT_PAYMENT string)
+row format delimited
+fields terminated by ','
+location '/user/ybhagia2005/intstallment_payments/';
+
+Verify if the table is created by running the show command:
+
+--> show tables;
+
+
+
+Step 3: Load Data From a File
+-----------------------------
+
+Load data by running the load command:
+
+--> load data inpath '/user/csv/intstallment_payments.csv' overwrite into table project1.intstallment_payments;
+
+
