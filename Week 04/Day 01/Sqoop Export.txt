@@ -1,0 +1,43 @@
+ybhagia2005@cluster-4de6-m:~$ mkdir export_txtFiles
+
+ybhagia2005@cluster-4de6-m:~$ cat /home/ybhagia2005/export_txtFiles/Customers1.txt
+cust001,Sumit Kumar,sumit@hotmail.com,+91-1111122222,Patna,BR
+cust002,Debopam Mitra,dev@hotmail.com,+91-9999988888,Siliguri,WB
+cust003,Neha Ladia,neha@hotmail.com,+91-8777799999,Siliguri,WB
+
+ybhagia2005@cluster-4de6-m:~$ cat /home/ybhagia2005/export_txtFiles/Customers2.txt
+cust004,Madhuri Achanala,madhuri@hotmail.com,+91-1234123412,Bengaluru,KA
+cust005,Anjana Sharma,anjana@hotmail.com,+91-8989898989,Bengaluru,KA
+cust006,Rohit Shankla,rohit@hotmail.com,+91-3232325454,Jaipur,RJ
+cust007,Pradeep Patidar,pradeep@hotmail.com,+91-1200120000,Indore,MP
+cust008,Anurag Shukla,annu@gmail.com,+91-8769645630,Lucknow,UP
+
+ybhagia2005@cluster-4de6-m:~$ hdfs dfs -copyFromLocal /home/ybhagia2005/export_txtFiles/Customers1.txt /user/export_ex/Customers1
+ybhagia2005@cluster-4de6-m:~$ hdfs dfs -copyFromLocal /home/ybhagia2005/export_txtFiles/Customers2.txt /user/export_ex/Customers2.txt
+
+mysql> use Test_Export        ;
+Database changed
+mysql> create table tbl_export_customers(customerid varchar(50),name varchar(50),email varchar(50),phoneno varchar(50),city varchar(50),state varchar(50),Primary Key(customeri
+d));
+Query OK, 0 rows affected (0.01 sec)
+
+
+mysql> describe tbl_export_customers;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| customerid | varchar(50) | NO   | PRI | NULL    |       |
+| name       | varchar(50) | YES  |     | NULL    |       |
+| email      | varchar(50) | YES  |     | NULL    |       |
+| phoneno    | varchar(50) | YES  |     | NULL    |       |
+| city       | varchar(50) | YES  |     | NULL    |       |
+| state      | varchar(50) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+ybhagia2005@cluster-4de6-m:~$ sqoop-export --connect jdbc:mysql://localhost:3306/Test_Export --username root --password password --table tbl_export_customers --export-dir /user/export_ex --m 1 --update-key customerid
+
+ybhagia2005@cluster-4de6-m:~$ sqoop export --connect jdbc:mysql://localhost/Test_Export --username root --password password --table tbl_export_customers --export-dir /user/export_ex --m 1 --input-fields-terminated-by ',' --update-key customerid
+
+
+
