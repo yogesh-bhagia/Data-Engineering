@@ -1,0 +1,28 @@
+
+Data Validation
+________________
+1. Data validation is a method for checking the accuracy and quality of your data, typically performed prior to importing and processing. 
+2. It can also be considered a form of data cleansing. 
+3. Data validation ensures that your data is complete (no blank or null values), unique (contains distinct values that are not duplicated), 
+and the range of values is consistent with what you expect. 
+4. Often, data validation is used as a part of processes such as ETL (Extract, Transform, and Load) where you move data from a source database to a target 
+data warehouse so that you can join it with other data for analysis. Data validation helps ensure that when you perform analysis, your results are accurate.
+
+
+
+Steps to data validation
+_________________________
+Step 1: Determine data sample
+
+Determine the data to sample. If you have a large volume of data, you will probably want to validate a sample of your data rather than the entire set. 
+You’ll need to decide what volume of data to sample, and what error rate is acceptable to ensure the success of your project.
+
+Step 2: Validate the database
+
+Before you move your data, you need to ensure that all the required data is present in your existing database. 
+Determine the number of records and unique IDs, and compare the source and target data fields.
+
+Step 3: Validate the data format
+
+Determine the overall health of the data and the changes that will be required of the source data to match the schema in the target. 
+Then search for incongruent or incomplete counts, duplicate data, incorrect formats, and null field values.
