@@ -1,0 +1,147 @@
+ybhagia2005@cluster-4de6-m:~$ wget https://raw.githubusercontent.com/futurexskill/bigdata/master/bank_prospects.csv
+--2021-07-14 09:27:10--  https://raw.githubusercontent.com/futurexskill/bigdata/master/bank_prospects.csv
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.108.133, 185.199.109.133, 185.199.110.133, ...
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.108.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 306 [text/plain]
+Saving to: ‘bank_prospects.csv’
+
+bank_prospects.csv    100%[=======================>]     306  --.-KB/s    in 0s      
+
+2021-07-14 09:27:10 (15.6 MB/s) - ‘bank_prospects.csv’ saved [306/306]
+
+ybhagia2005@cluster-4de6-m:~$ hadoop fs -put bank_prospects.csv /user/futurexskill/data
+ybhagia2005@cluster-4de6-m:~$ spark-shell
+
+
+scala> val bankProspectsDF = spark.read.option("header", "true").option("inferSchema","true").csv("/user/futurexskill/data/bank_prospects.csv")
+bankProspectsDF: org.apache.spark.sql.DataFrame = [Age: int, Salary: int ... 3 more fields]
+
+scala> bankProspectsDF.show()
++----+------+------+-------+---------+                                          
+| Age|Salary|Gender|Country|Purchased|
++----+------+------+-------+---------+
+|  18| 20000|  Male|Germany|        N|
+|  19| 22000|Female| France|        N|
+|  20| 24000|Female|England|        N|
+|  21|  null|  Male|England|        N|
+|  22| 50000|  Male| France|        Y|
+|  23| 35000|Female|England|        N|
+|  24|  null|  Male|Germany|        N|
+|  25| 32000|Female| France|        Y|
+|null| 35000|  Male|Germany|        N|
+|  27| 37000|Female| France|        N|
+|  27| 37000|Female|unknown|        N|
++----+------+------+-------+---------+
+
+scala> val bankProspectsDF1 = bankProspectsDF.filter($"Country" !== "unknown")
+warning: one deprecation (since 2.0.0); for details, enable `:setting -deprecation' or `:replay -deprecation'
+bankProspectsDF1: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [Age: int, Salary: int ... 3 more fields]
+
+scala> bankProspectsDF1.show()
++----+------+------+-------+---------+
+| Age|Salary|Gender|Country|Purchased|
++----+------+------+-------+---------+
+|  18| 20000|  Male|Germany|        N|
+|  19| 22000|Female| France|        N|
+|  20| 24000|Female|England|        N|
+|  21|  null|  Male|England|        N|
+|  22| 50000|  Male| France|        Y|
+|  23| 35000|Female|England|        N|
+|  24|  null|  Male|Germany|        N|
+|  25| 32000|Female| France|        Y|
+|null| 35000|  Male|Germany|        N|
+|  27| 37000|Female| France|        N|
++----+------+------+-------+---------+
+
+
+scala> val meanAgeArray = bankProspectsDF1.select(avg($"age")).collect()
+meanAgeArray: Array[org.apache.spark.sql.Row] = Array([22.11111111111111])
+
+scala> val meanAge : Double = meanAgeArray(0)(0).toString.toDouble
+meanAge: Double = 22.11111111111111
+
+scala> 
+
+scala> val meanSalaryArray = bankProspectsDF1.select(avg("salary")).collect()
+meanSalaryArray: Array[org.apache.spark.sql.Row] = Array([31875.0])
+
+scala> val meanSalary= meanSalaryArray(0)(0)
+meanSalary: Any = 31875.0
+
+scala> val meanSalary : Double = meanSalaryArray(0)(0).toString.toDouble
+meanSalary: Double = 31875.0
+
+scala> val bankProspectsDF2 = bankProspectsDF1.na.fill(meanAge,Array("Age"))
+bankProspectsDF2: org.apache.spark.sql.DataFrame = [Age: int, Salary: int ... 3 more fields]
+
+scala> bankProspectsDF2.show()
++---+------+------+-------+---------+
+|Age|Salary|Gender|Country|Purchased|
++---+------+------+-------+---------+
+| 18| 20000|  Male|Germany|        N|
+| 19| 22000|Female| France|        N|
+| 20| 24000|Female|England|        N|
+| 21|  null|  Male|England|        N|
+| 22| 50000|  Male| France|        Y|
+| 23| 35000|Female|England|        N|
+| 24|  null|  Male|Germany|        N|
+| 25| 32000|Female| France|        Y|
+| 22| 35000|  Male|Germany|        N|
+| 27| 37000|Female| France|        N|
++---+------+------+-------+---------+
+
+
+scala> val bankProspectsDF3 = bankProspectsDF2.na.fill(meanSalary,Array("Salary"))
+bankProspectsDF3: org.apache.spark.sql.DataFrame = [Age: int, Salary: int ... 3 more fields]
+
+scala> bankProspectsDF3.show()
++---+------+------+-------+---------+
+|Age|Salary|Gender|Country|Purchased|
++---+------+------+-------+---------+
+| 18| 20000|  Male|Germany|        N|
+| 19| 22000|Female| France|        N|
+| 20| 24000|Female|England|        N|
+| 21| 31875|  Male|England|        N|
+| 22| 50000|  Male| France|        Y|
+| 23| 35000|Female|England|        N|
+| 24| 31875|  Male|Germany|        N|
+| 25| 32000|Female| France|        Y|
+| 22| 35000|  Male|Germany|        N|
+| 27| 37000|Female| France|        N|
++---+------+------+-------+---------+
+
+scala> bankProspectsDF3.write.format("csv").save("bank_prospects_transformed")
+                                                                                
+scala> hadoop fs -ls bank_prospects_transformed/
+<console>:23: error: not found: value hadoop
+hadoop fs -ls bank_prospects_transformed/
+^
+<console>:23: error: not found: value ls
+hadoop fs -ls bank_prospects_transformed/
+           ^
+<console>:23: error: not found: value /
+hadoop fs -ls bank_prospects_transformed/
+                                        ^
+
+scala> :quit
+ybhagia2005@cluster-4de6-m:~$ hadoop fs -ls bank_prospects_transformed/
+Found 2 items
+-rw-r--r--   1 ybhagia2005 hadoop          0 2021-07-14 09:44 bank_prospects_transformed/_SUCCESS
+-rw-r--r--   1 yarn        hadoop        246 2021-07-14 09:44 bank_prospects_transformed/part-00000-a37d9d5b-2f72-4781-bfc8-70c25fb7a03c-c000.csv
+ybhagia2005@cluster-4de6-m:~$ hadoop fs -ls bank_prospects_transformed/
+Found 2 items
+-rw-r--r--   1 ybhagia2005 hadoop          0 2021-07-14 09:44 bank_prospects_transformed/_SUCCESS
+-rw-r--r--   1 yarn        hadoop        246 2021-07-14 09:44 bank_prospects_transformed/part-00000-a37d9d5b-2f72-4781-bfc8-70c25fb7a03c-c000.csv
+ybhagia2005@cluster-4de6-m:~$ hadoop fs -cat bank_prospects_transformed/part-00000-a37d9d5b-2f72-4781-bfc8-70c25fb7a03c-c000.csv
+18,20000,Male,Germany,N
+19,22000,Female,France,N
+20,24000,Female,England,N
+21,31875,Male,England,N
+22,50000,Male,France,Y
+23,35000,Female,England,N
+24,31875,Male,Germany,N
+25,32000,Female,France,Y
+22,35000,Male,Germany,N
+27,37000,Female,France,N
+ybhagia2005@cluster-4de6-m:~$ 
