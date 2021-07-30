@@ -1,0 +1,342 @@
+scala> val customerDF = spark.read.csv("/user/futurexskill/data/retailstore.csv")
+customerDF: org.apache.spark.sql.DataFrame = [_c0: string, _c1: string ... 3 more fields]
+
+customerDF.show()
++----+------+------+-------+---------+
+| _c0|   _c1|   _c2|    _c3|      _c4|
++----+------+------+-------+---------+
+| Age|Salary|Gender|Country|Purchased|
+|  18| 20000|  Male|Germany|        N|
+|  19| 22000|Female| France|        N|
+|  20| 24000|Female|England|        N|
+|  21|  null|  Male|England|        N|
+|  22| 50000|  Male| France|        Y|
+|  23| 35000|Female|England|        N|
+|  24|  null|  Male|Germany|        N|
+|  25| 32000|Female| France|        Y|
+|null| 35000|  Male|Germany|        N|
+|  27| 37000|Female| France|        N|
++----+------+------+-------+---------+
+
+scala> val customerDF = spark.read.option("header", "true").csv("/user/futurexskill/data/retailstore.csv")
+customerDF: org.apache.spark.sql.DataFrame = [Age: string, Salary: string ... 3 more fields]
+
+scala> customerDF.show()
++----+------+------+-------+---------+
+| Age|Salary|Gender|Country|Purchased|
++----+------+------+-------+---------+
+|  18| 20000|  Male|Germany|        N|
+|  19| 22000|Female| France|        N|
+|  20| 24000|Female|England|        N|
+|  21|  null|  Male|England|        N|
+|  22| 50000|  Male| France|        Y|
+|  23| 35000|Female|England|        N|
+|  24|  null|  Male|Germany|        N|
+|  25| 32000|Female| France|        Y|
+|null| 35000|  Male|Germany|        N|
+|  27| 37000|Female| France|        N|
++----+------+------+-------+---------+
+
+scala> customerDF.head()
+res2: org.apache.spark.sql.Row = [18,20000,Male,Germany,N]
+
+scala> customerDF.groupBy("Gender").count()
+res3: org.apache.spark.sql.DataFrame = [Gender: string, count: bigint]
+
+scala> customerDF.groupBy("Gender").count().show()
++------+-----+                                                                  
+|Gender|count|
++------+-----+
+|Female|    5|
+|  Male|    5|
++------+-----+
+
+scala> customerDF.describe().show()
++-------+-----------------+-----------------+------+-------+---------+
+|summary|              Age|           Salary|Gender|Country|Purchased|
++-------+-----------------+-----------------+------+-------+---------+
+|  count|                9|                8|    10|     10|       10|
+|   mean|22.11111111111111|          31875.0|  null|   null|     null|
+| stddev|2.934469476943168|9818.895777311942|  null|   null|     null|
+|    min|               18|            20000|Female|England|        N|
+|    max|               27|            50000|  Male|Germany|        Y|
++-------+-----------------+-----------------+------+-------+---------+
+
+scala> customerDF.select("Country").show()
++-------+
+|Country|
++-------+
+|Germany|
+| France|
+|England|
+|England|
+| France|
+|England|
+|Germany|
+| France|
+|Germany|
+| France|
++-------+
+
+
+scala> customerDF.groupBy("Country").count().show()
++-------+-----+
+|Country|count|
++-------+-----+
+|Germany|    3|
+| France|    4|
+|England|    3|
++-------+-----+
+
+scala> customerDF.groupBy("Gender").count().show()
++------+-----+
+|Gender|count|
++------+-----+
+|Female|    5|
+|  Male|    5|
++------+-----+
+
+## Create a temporary table
+
+scala> customerDF.createOrReplaceTempView("customer")
+
+scala> val results = spark.sql("select * from customer")
+results: org.apache.spark.sql.DataFrame = [Age: string, Salary: string ... 3 more fie
+lds]
+
+scala> results.show()
++----+------+------+-------+---------+
+| Age|Salary|Gender|Country|Purchased|
++----+------+------+-------+---------+
+|  18| 20000|  Male|Germany|        N|
+|  19| 22000|Female| France|        N|
+|  20| 24000|Female|England|        N|
+|  21|  null|  Male|England|        N|
+|  22| 50000|  Male| France|        Y|
+|  23| 35000|Female|England|        N|
+|  24|  null|  Male|Germany|        N|
+|  25| 32000|Female| France|        Y|
+|null| 35000|  Male|Germany|        N|
+|  27| 37000|Female| France|        N|
++----+------+------+-------+---------+
+
+
+scala> val results2 = spark.sql("select * from customer where age>22")
+results2: org.apache.spark.sql.DataFrame = [Age: string, Salary: string ... 3 more fi
+elds]
+
+scala> results2.show()
++---+------+------+-------+---------+
+|Age|Salary|Gender|Country|Purchased|
++---+------+------+-------+---------+
+| 23| 35000|Female|England|        N|
+| 24|  null|  Male|Germany|        N|
+| 25| 32000|Female| France|        Y|
+| 27| 37000|Female| France|        N|
++---+------+------+-------+---------+
+
+
+scala> customerDF.select("age","salary").show()
++----+------+
+| age|salary|
++----+------+
+|  18| 20000|
+|  19| 22000|
+|  20| 24000|
+|  21|  null|
+|  22| 50000|
+|  23| 35000|
+|  24|  null|
+|  25| 32000|
+|null| 35000|
+|  27| 37000|
++----+------+
+
+scala> customerDF.filter("Salary > 30000").select("age","Country").show()
++----+-------+
+| age|Country|
++----+-------+
+|  22| France|
+|  23|England|
+|  25| France|
+|null|Germany|
+|  27| France|
++----+-------+
+
+scala> customerDF.filter("Salary > 30000").select("age","Country").count()
+res20: Long = 5
+ 
+scala> customerDF.printSchema()
+root
+ |-- Age: string (nullable = true)
+ |-- Salary: string (nullable = true)
+ |-- Gender: string (nullable = true)
+ |-- Country: string (nullable = true)
+ |-- Purchased: string (nullable = true)
+
+scala> val customerDF2 = spark.read.option("header", "true").option("inferSchema","true").csv("/user/futurexskill/data/retailstore.csv")
+customerDF2: org.apache.spark.sql.DataFrame = [Age: int, Salary: int ... 3 more fields]
+
+scala> customerDF2.printSchema()
+root
+ |-- Age: integer (nullable = true)
+ |-- Salary: integer (nullable = true)
+ |-- Gender: string (nullable = true)
+ |-- Country: string (nullable = true)
+ |-- Purchased: string (nullable = true)
+
+scala> customerDF2.groupBy("country").min().show()
++-------+--------+-----------+
+|country|min(Age)|min(Salary)|
++-------+--------+-----------+
+|Germany|      18|      20000|
+| France|      19|      22000|
+|England|      20|      24000|
++-------+--------+-----------+
+
+
+scala> customerDF2.groupBy("age").mean().show()
++----+--------+-----------+
+| age|avg(Age)|avg(Salary)|
++----+--------+-----------+
+|  27|    27.0|    37000.0|
+|  22|    22.0|    50000.0|
+|null|    null|    35000.0|
+|  20|    20.0|    24000.0|
+|  19|    19.0|    22000.0|
+|  23|    23.0|    35000.0|
+|  25|    25.0|    32000.0|
+|  24|    24.0|       null|
+|  21|    21.0|       null|
+|  18|    18.0|    20000.0|
++----+--------+-----------+
+
+
+scala> customerDF2.select(countDistinct("country")).show()
++-----------------------+
+|count(DISTINCT country)|
++-----------------------+
+|                      3|
++-----------------------+
+
+scala> customerDF2.select(avg("salary")).show()
++-----------+
+|avg(salary)|
++-----------+
+|    31875.0|
++-----------+
+
+scala> customerDF2.select(countDistinct("country").alias("Distinct Countries")).show()
++------------------+
+|Distinct Countries|
++------------------+
+|                 3|
++------------------+
+
+
+scala> customerDF2.select(avg("age")).show()
++-----------------+
+|         avg(age)|
++-----------------+
+|22.11111111111111|
++-----------------+
+
+scala> customerDF2.select(stddev("salary")).show()
++-------------------+
+|stddev_samp(salary)|
++-------------------+
+|  9818.895777311942|
++-------------------+
+
+scala> customerDF2.orderBy("salary").show()
++----+------+------+-------+---------+
+| Age|Salary|Gender|Country|Purchased|
++----+------+------+-------+---------+
+|  21|  null|  Male|England|        N|
+|  24|  null|  Male|Germany|        N|
+|  18| 20000|  Male|Germany|        N|
+|  19| 22000|Female| France|        N|
+|  20| 24000|Female|England|        N|
+|  25| 32000|Female| France|        Y|
+|null| 35000|  Male|Germany|        N|
+|  23| 35000|Female|England|        N|
+|  27| 37000|Female| France|        N|
+|  22| 50000|  Male| France|        Y|
++----+------+------+-------+---------+
+
+scala> customerDF2.show()
++----+------+------+-------+---------+
+| Age|Salary|Gender|Country|Purchased|
++----+------+------+-------+---------+
+|  18| 20000|  Male|Germany|        N|
+|  19| 22000|Female| France|        N|
+|  20| 24000|Female|England|        N|
+|  21|  null|  Male|England|        N|
+|  22| 50000|  Male| France|        Y|
+|  23| 35000|Female|England|        N|
+|  24|  null|  Male|Germany|        N|
+|  25| 32000|Female| France|        Y|
+|null| 35000|  Male|Germany|        N|
+|  27| 37000|Female| France|        N|
++----+------+------+-------+---------+
+
+
+scala> customerDF2.na.drop().show()
++---+------+------+-------+---------+
+|Age|Salary|Gender|Country|Purchased|
++---+------+------+-------+---------+
+| 18| 20000|  Male|Germany|        N|
+| 19| 22000|Female| France|        N|
+| 20| 24000|Female|England|        N|
+| 22| 50000|  Male| France|        Y|
+| 23| 35000|Female|England|        N|
+| 25| 32000|Female| France|        Y|
+| 27| 37000|Female| France|        N|
++---+------+------+-------+---------+
+
+
+scala> customerDF2.na.fill(0).show()
++---+------+------+-------+---------+
+|Age|Salary|Gender|Country|Purchased|
++---+------+------+-------+---------+
+| 18| 20000|  Male|Germany|        N|
+| 19| 22000|Female| France|        N|
+| 20| 24000|Female|England|        N|
+| 21|     0|  Male|England|        N|
+| 22| 50000|  Male| France|        Y|
+| 23| 35000|Female|England|        N|
+| 24|     0|  Male|Germany|        N|
+| 25| 32000|Female| France|        Y|
+|  0| 35000|  Male|Germany|        N|
+| 27| 37000|Female| France|        N|
++---+------+------+-------+---------+
+
+scala> import spark.implicits._
+import spark.implicits._
+
+scala> customerDF.select($"Country").show()
++-------+
+|Country|
++-------+
+|Germany|
+| France|
+|England|
+|England|
+| France|
+|England|
+|Germany|
+| France|
+|Germany|
+| France|
++-------+
+
+scala> customerDF.filter($"Salary" > 30000).select("Age").show()
++----+
+| Age|
++----+
+|  22|
+|  23|
+|  25|
+|null|
+|  27|
++----+
