@@ -1,0 +1,9 @@
+
+{ 
+"connectionURL" : "jdbc:mysql://localhost:3306/demo",
+"usrName" : "root",
+"pWord" : "password",
+"mysqlName" : "emp",
+"targetDir" : "emp",
+"hiveName" : "default.emphive"
+}~         
