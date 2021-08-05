@@ -1,9 +1,24 @@
 
-{ 
-"connectionURL" : "jdbc:mysql://localhost:3306/demo",
-"usrName" : "root",
-"pWord" : "password",
-"mysqlName" : "emp",
-"targetDir" : "emp",
-"hiveName" : "default.emphive"
-}  
+
+
+
+
+{
+	
+	
+	
+	"hdfs_csv_location": "/user/ybhagia2005/csvFiles/",
+    "checkType": "hdfs",
+    "csvName": "POS_CASH_balance.csv",
+    "hiveDBname": "sqoop_workspace",
+    "connURL": "jdbc:mysql://localhost:3306/demo",
+    "mysqlTblName": "new_tbl_application_train",
+    "targetDir": "output/application_train",
+    "hiveTblName": "sqoop_workspace.application_train",
+    "userName": "root",
+    "passWord": "password"
+
+
+
+
+}
