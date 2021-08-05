@@ -1,0 +1,8 @@
+{
+    "connURL": "jdbc:mysql://localhost:3306/demo",
+    "userName": "root",
+    "passWord": "password",
+    "mysqlTblName": "application_train_table",
+    "targetDir": "output/application_train_target_table",
+    "hiveTblName": "sqoop_workspace.application_target_train"
+}
